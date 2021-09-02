@@ -1,6 +1,11 @@
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        maven {
+            url 'http://maven.aliyun.com/nexus/content/groups/public/'
+            // https://stackoverflow.com/questions/68585885/allow-insecure-protocols-android-gradle
+            allowInsecureProtocol = true
+        }
         google()
         mavenCentral()
     }
@@ -8,3 +13,5 @@ dependencyResolutionManagement {
 rootProject.name = "Ezz"
 include ':app'
 includeBuild('../versionplugin')
+include ':lib_common'
+include ':vblib'

@@ -21,12 +21,14 @@ object BuildVersion {
     const val versionName = "1.0"
     const val jvmTarget = "1.8"
     const val applicationId = "com.wdl.ezz"
+    const val gradleVersion = "7.0.2"
 }
 
 object Androidx {
     const val coreKtx = "androidx.core:core-ktx:${Version.coreKtxVersion}"
     const val appcompat = "androidx.appcompat:appcompat:${Version.appcompatVersion}"
     const val material = "com.google.android.material:material:${Version.materialVersion}"
+    const val viewBinding = "androidx.databinding:viewbinding:${BuildVersion.gradleVersion}"
 }
 
 object Compose {
