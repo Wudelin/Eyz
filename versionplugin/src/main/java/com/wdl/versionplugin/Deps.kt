@@ -25,7 +25,8 @@ object Version {
     const val recyclerviewVersion = "1.1.0"
     const val constraintlayoutVersion = "2.0.4"
     const val fragmentVersion = "1.2.5"
-    const val startupVersion = "1.0.0"
+    const val startupVersion = "1.1.0"
+    const val roomVersion = "2.3.0"
 }
 
 object BuildVersion {
@@ -110,6 +111,12 @@ object Net{
     const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Version.okhttp3Version}"
     const val retrofit2 = "com.squareup.retrofit2:retrofit:${Version.retrofitVersion}"
     const val converterGson = "com.squareup.retrofit2:converter-gson:${Version.retrofitVersion}"
+}
+
+object Room{
+    const val roomRuntime = "androidx.room:room-runtime:${Version.roomVersion}"
+    const val roomCompiler = "androidx.room:room-compiler:${Version.roomVersion}"
+    const val roomKtx = "androidx.room:room-ktx:${Version.roomVersion}"
 }
 
 

@@ -89,10 +89,18 @@ subprojects { subproject ->
         configureAndroid(subproject)
 
         dependencies {
+            api Androidx.startupRuntime
             api Compose.ui
             api Compose.runtime
             api Compose.material
             api Compose.toolingPreview
+            api Hilt.hiltAndroid
+            kapt Hilt.hiltCompiler
+            kapt Hilt.hiltAndroidXCompiler
+
+            api Room.roomRuntime
+            api Room.roomKtx
+            kapt Room.roomCompiler
         }
     }
 
@@ -123,6 +131,12 @@ public void configureAndroid(Project project) {
             testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
             vectorDrawables {
                 useSupportLibrary true
+            }
+
+            javaCompileOptions {
+                annotationProcessorOptions {
+                    arguments["room.incremental"] = "true"
+                }
             }
         }
 

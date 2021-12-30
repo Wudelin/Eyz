@@ -4,6 +4,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.didi.dokit'
+apply plugin: 'dagger.hilt.android.plugin'
 apply from:'../dokit.gradle'
 
 configureAndroid(project)
@@ -26,4 +27,9 @@ dependencies {
     releaseImplementation Dokitx.dokitxNP
 
     api project(path: ':lib_common')
+    api project(path: ':ez_provider')
+
+    api Hilt.hiltAndroid
+    kapt Hilt.hiltCompiler
+    kapt Hilt.hiltAndroidXCompiler
 }
