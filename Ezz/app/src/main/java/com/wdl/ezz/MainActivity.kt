@@ -1,38 +1,16 @@
 package com.wdl.ezz
 
-import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import com.wdl.ezz.ui.theme.EzzTheme
+import com.wdl.ezz.databinding.ActivityMainBinding
+import com.wdl.vblib.viewBinding
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            EzzTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
-                }
-            }
-        }
-    }
-}
+class MainActivity : ComponentActivity(R.layout.activity_main) {
+    private val vb by viewBinding(ActivityMainBinding::bind)
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
+    override fun onResume() {
+        super.onResume()
+        vb.tv.text = "Txxxxxxxxx"
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    EzzTheme {
-        Greeting("Android")
+//        toast("----")
     }
 }

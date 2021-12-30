@@ -1,22 +1,32 @@
+import com.wdl.versionplugin.*
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext {
-        kotlin_version = "1.5.21"
-    }
     repositories {
+//        maven {
+//            url 'http://maven.aliyun.com/nexus/content/groups/public/'
+//            // https://stackoverflow.com/questions/68585885/allow-insecure-protocols-android-gradle
+//            allowInsecureProtocol = true
+//        }
         maven {
-            url 'http://maven.aliyun.com/nexus/content/groups/public/'
-            // https://stackoverflow.com/questions/68585885/allow-insecure-protocols-android-gradle
-            allowInsecureProtocol = true
+            url 'https://maven.aliyun.com/repository/public'
         }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        google()
+        maven {
+            url 'https://maven.aliyun.com/repository/google'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/gradle-plugin'
+        }
+
         mavenCentral()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.30"
+        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0'
         classpath "com.alibaba:arouter-register:1.0.2"
+        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.40'
+        classpath 'io.github.didi.dokit:dokitx-plugin:3.5.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -37,16 +47,14 @@ subprojects { subproject ->
     // 默认应用所有子项目中
     apply plugin: 'com.wdl.versionplugin'
 
-    if (subproject.name == "app") {
-        apply plugin: 'com.android.application'
-    }
-
-    apply plugin: 'kotlin-android'
-    apply plugin: 'kotlin-android-extensions'
-    apply plugin: 'kotlin-kapt'
-
-    if (subproject.name.startsWith("ez_") && subproject.name != "ez_provider") {
+    if (subproject.name.startsWith("ez_")) {
         apply plugin: 'com.android.library'
+        apply plugin: 'kotlin-android'
+        apply plugin: 'kotlin-kapt'
+        if (subproject.name != "ez_provider")
+            apply plugin: 'dagger.hilt.android.plugin'
+
+        configureAndroid(subproject)
 
         kapt {
             arguments {
@@ -55,7 +63,36 @@ subprojects { subproject ->
         }
 
         dependencies {
-            kapt 'com.alibaba:arouter-compiler:1.5.2'
+            implementation fileTree(dir: "libs", include: ["*.jar"])
+            kapt ARouter.router
+            testImplementation Test.junit
+            androidTestImplementation Test.junitExt
+            androidTestImplementation Test.espressoCore
+
+            if (subproject.name != "ez_provider") {
+                api project(path: ':ez_provider')
+                api Hilt.hiltAndroid
+                kapt Hilt.hiltCompiler
+                kapt Hilt.hiltAndroidXCompiler
+            } else {
+                api project(path: ':lib_common')
+            }
+        }
+    }
+
+    if (subproject.name == "lib_common") {
+        apply plugin: 'com.android.library'
+        apply plugin: 'kotlin-android'
+        apply plugin: 'kotlin-kapt'
+        apply plugin: 'dagger.hilt.android.plugin'
+
+        configureAndroid(subproject)
+
+        dependencies {
+            api Compose.ui
+            api Compose.runtime
+            api Compose.material
+            api Compose.toolingPreview
         }
     }
 
@@ -70,4 +107,51 @@ subprojects { subproject ->
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+
+public void configureAndroid(Project project) {
+    project.android {
+        compileSdk BuildVersion.compileSdk
+
+        defaultConfig {
+            minSdk BuildVersion.minSdk
+            targetSdk BuildVersion.targetSdk
+            versionCode BuildVersion.versionCode
+            versionName BuildVersion.versionName
+
+            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+            vectorDrawables {
+                useSupportLibrary true
+            }
+        }
+
+        buildTypes {
+            release {
+                minifyEnabled false
+                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            }
+        }
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+        kotlinOptions {
+            jvmTarget = BuildVersion.jvmTarget
+            useIR = true
+        }
+        buildFeatures {
+            compose true
+            viewBinding true
+        }
+        composeOptions {
+            kotlinCompilerExtensionVersion Version.composeVersion
+            kotlinCompilerVersion Version.kotlinVersion
+        }
+        packagingOptions {
+            resources {
+                excludes += '/META-INF/{AL2.0,LGPL2.1}'
+            }
+        }
+    }
 }

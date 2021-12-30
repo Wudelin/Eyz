@@ -1,47 +1,15 @@
 import com.wdl.versionplugin.*
 
-android {
-    compileSdk BuildVersion.compileSdk
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.didi.dokit'
+apply from:'../dokit.gradle'
 
+configureAndroid(project)
+android {
     defaultConfig {
         applicationId BuildVersion.applicationId
-        minSdk BuildVersion.minSdk
-        targetSdk BuildVersion.targetSdk
-        versionCode BuildVersion.versionCode
-        versionName BuildVersion.versionName
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary true
-        }
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = BuildVersion.jvmTarget
-        useIR = true
-    }
-    buildFeatures {
-        compose true
-        viewBinding true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion Version.composeVersion
-        kotlinCompilerVersion '1.5.21'
-    }
-    packagingOptions {
-        resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-        }
     }
 }
 
@@ -49,14 +17,13 @@ dependencies {
     implementation Androidx.coreKtx
     implementation Androidx.appcompat
     implementation Androidx.material
-    implementation Compose.ui
-    implementation Compose.material
-    implementation Compose.toolingPreview
     implementation Lifecycle.runtime
     implementation Compose.activityCompose
-    testImplementation Test.junit
-    androidTestImplementation Test.junitExt
-    androidTestImplementation Test.espressoCore
     androidTestImplementation Test.composeUiTest
     debugImplementation Compose.tooling
+
+    debugImplementation Dokitx.dokitx
+    releaseImplementation Dokitx.dokitxNP
+
+    api project(path: ':lib_common')
 }

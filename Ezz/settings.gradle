@@ -15,3 +15,4 @@ include ':app'
 includeBuild('../versionplugin')
 include ':lib_common'
 include ':vblib'
+include ':ez_provider'

@@ -9,7 +9,6 @@ android {
     compileSdk BuildVersion.compileSdk
 
     defaultConfig {
-        applicationId BuildVersion.applicationId
         minSdk BuildVersion.minSdk
         targetSdk BuildVersion.targetSdk
         versionCode BuildVersion.versionCode
@@ -65,4 +64,5 @@ dependencies {
     androidTestImplementation Test.espressoCore
     androidTestImplementation Test.composeUiTest
     debugImplementation Compose.tooling
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.3.1'
 }
